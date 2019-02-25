@@ -1,8 +1,34 @@
-﻿@{
+﻿@model CreateIDTViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div id="container">
+
+    <label for="ddlCategory"><strong>Select a category</strong></label>
+    
+    @Html.DropDownListFor(m => m.CategoryId,
+        new SelectList(Model.CategoryList, "CategoryId", "CategoryName", Model.CategoryId), new { id = "ddlCategory", @class = "test" })
+    <br />
+    <br />
+
+    <div id="dvCategoryResults">
+        @{Html.RenderPartial("CategoryResults", Model);}
+    </div>
+
 </div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            alert("jQuery!");
+            $("#ddlCategory").change(function () {
+                var categoryId = $("#ddlCategory").val();
+                $("#dvCategoryResults").load('/Home/GetCategoryProducts/?categoryId=' + categoryId);
+            });
+        });
+
+    </script>
+}
